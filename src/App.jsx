@@ -1,27 +1,29 @@
-import './App.css'
-import { gql, useQuery } from '@apollo/client'
-import Persons from './Persons'
+import { useState } from 'react'
+import NotifyError from './NotifyError'
+import EditPhone from './EditPhone'
 
-const ALL_PERSONS = gql`
-  query {
-    allPersons {
-      name
-      fullName
-      age
-      phone
-    }
-  }
-`
+import './App.css'
+import usePersons from './persons/usePersons'
+import Persons from './Persons'
+import PersonForm from './PersonForm'
 
 function App() {
-  const { data, loading, error } = useQuery(ALL_PERSONS)
+  const { data, loading, error } = usePersons()
+  const [errorMessage, setErrorMessage] = useState(null)
+
+  const notifyError = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => setErrorMessage(null), 5000)
+  }
 
   if (error) return <h1>Error</h1>
 
   return (
     <div className='App'>
-      <h1>Hello World</h1>
-      <p>React + graphql</p>
+      <h1>Person machine</h1>
+      <PersonForm notifyError={notifyError} />
+      <NotifyError message={errorMessage} />
+      <EditPhone />
       {loading ? <p>Loading...</p> : <Persons persons={data?.allPersons} />}
     </div>
   )

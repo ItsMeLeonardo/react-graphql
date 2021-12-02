@@ -1,16 +1,7 @@
-import { useEffect, useState } from 'react'
-import { gql, useLazyQuery } from '@apollo/client'
+import { useState } from 'react'
+import { useLazyQuery } from '@apollo/client'
+import { FIND_PERSON } from './persons/queries'
 import Person from './Person'
-
-const FIND_PERSON = gql`
-  query findPersonByName($name: String!) {
-    findPerson(name: $name) {
-      fullName
-      age
-      phone
-    }
-  }
-`
 
 export default function Persons({ persons }) {
   const [findPerson, { data, called, loading }] = useLazyQuery(FIND_PERSON)
@@ -27,8 +18,7 @@ export default function Persons({ persons }) {
   if (called && person) {
     return (
       <section>
-        <h1>{data?.findPerson?.name}</h1>
-        <Person {...data?.findPerson} />
+        <h1>{data.findPerson?.fullName}</h1>
         <button onClick={() => setPerson(null)}>Go to back</button>
       </section>
     )
@@ -42,7 +32,7 @@ export default function Persons({ persons }) {
           <div key={`person-${person?.fullName}-${person?.id}`}>
             <Person {...person} />
             <button type='button' onClick={() => showPerson(person.name)}>
-              See detail
+              See details
             </button>
           </div>
         ))}

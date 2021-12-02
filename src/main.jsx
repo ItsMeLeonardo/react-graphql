@@ -12,6 +12,7 @@ import App from './App'
 const BASE_URL = 'http://localhost:4000'
 
 const client = new ApolloClient({
+  connectToDevTools: true,
   cache: new InMemoryCache(),
   link: new HttpLink({
     uri: BASE_URL,
